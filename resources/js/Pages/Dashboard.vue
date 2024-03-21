@@ -51,6 +51,8 @@ const changeStatus = (task) => {
                                     <p class="text-gray-500">{{ task.description }}</p>
                                     <p class="text-gray-500">Due Date: {{ task.due_date }}</p>
                                     <p class="text-gray-500">Priority: {{ task.priority }}</p>
+                                    <p class="text-gray-500">Status: {{ task.status ? 'Completed' : 'Not Completed'
+                                        }}</p>
                                     <div class="mt-4 flex justify-end">
                                         <button @click="editTask(task)" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
                                         <button @click="deleteTask(task)" class="text-red-600 hover:text-red-900 mr-2">Delete</button>
