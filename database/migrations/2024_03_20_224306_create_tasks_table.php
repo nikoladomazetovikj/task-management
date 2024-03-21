@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->date('due_date');
             $table->string('priority');
-            $table->string('status');
+            $table->boolean('status')->default(false)->comment('False if it is not completed, true if it is completed');
             $table->foreignId('user_id')->nullable()->index();
             $table->timestamps();
         });
