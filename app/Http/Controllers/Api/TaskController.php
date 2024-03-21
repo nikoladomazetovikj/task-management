@@ -11,6 +11,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -19,7 +20,7 @@ class TaskController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $tasks = Task::where('user_id', auth()->id)->get();
+        $tasks = Task::where('user_id', Auth::user()->id)->get();
 
         return TaskResource::collection($tasks);
     }
