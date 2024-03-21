@@ -50,6 +50,19 @@ const changeStatus = async (task) => {
     }
 };
 
+const priorityColor = (priority) => {
+    switch (priority.toLowerCase()) {
+        case 'low':
+            return 'bg-yellow-500';
+        case 'medium':
+            return 'bg-blue-500';
+        case 'high':
+            return 'bg-red-500';
+        default:
+            return 'bg-gray-500';
+    }
+};
+
 </script>
 
 <template>
@@ -64,17 +77,22 @@ const changeStatus = async (task) => {
                     <template v-if="tasks.length">
                         <div v-for="task in tasks" :key="task.id">
                             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                <div class="p-6">
+                                <div class="p-6 flex flex-col h-full">
                                     <h3 class="text-lg font-semibold">{{ task.name }}</h3>
                                     <p class="text-gray-500">{{ task.description }}</p>
-                                    <p class="text-gray-500">Due Date: {{ task.due_date }}</p>
-                                    <p class="text-gray-500">Priority: {{ task.priority }}</p>
-                                    <p class="text-gray-500">Status: {{ task.status ? 'Completed' : 'Not Completed'
-                                        }}</p>
-                                    <div class="mt-4 flex justify-end">
-                                        <button @click="editTask(task)" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
-                                        <button @click="deleteTask(task)" class="text-red-600 hover:text-red-900 mr-2">Delete</button>
-                                        <button v-if="!task.status" @click="changeStatus(task)" class="text-green-600 hover:text-green-900">Mrk Done</button>
+                                    <p class="text-gray-500">Due Date: <b>{{ task.due_date }}</b></p>
+                                    <p class="text-gray-500">
+                                        Priority:
+                                        <span :class="priorityColor(task.priority)" class="inline-block px-2 py-1 rounded-full text-sm font-semibold text-white">{{ task.priority }}</span>
+                                    </p>
+                                    <p :class="task.status ? 'text-green-500' : 'text-red-500'">
+                                        Status: {{ task.status ? 'Completed' : 'Not Completed' }}
+                                    </p>
+                                    <hr>
+                                    <div class="mt-4 flex justify-between items-center">
+                                        <button @click="editTask(task)" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                                        <button @click="deleteTask(task)" class="text-red-600 hover:text-red-900">Delete</button>
+                                        <button v-if="!task.status" @click="changeStatus(task)" class="text-green-600 hover:text-green-900">Mark Done</button>
                                     </div>
                                 </div>
                             </div>
