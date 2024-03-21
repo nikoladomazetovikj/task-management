@@ -24,12 +24,30 @@ const editTask = (task) => {
     // TODO:
 };
 
-const deleteTask = (task) => {
-    // TODO:
+const deleteTask = async (task) => {
+    try {
+        const response = await axios.delete(`/api/task/${task.id}`);
+        if (response.status === 204) {
+            tasks.value = tasks.value.filter(t => t.id !== task.id);
+        } else {
+            console.error('Failed to delete task', response);
+        }
+    } catch (error) {
+        console.error('Error deleting task:', error);
+    }
 };
 
-const changeStatus = (task) => {
-    // TODO:
+const changeStatus = async (task) => {
+    try {
+        const response = await axios.put(`/api/task/${task.id}`, { status: true });
+        if (response.status === 200) {
+            task.status = true;
+        } else {
+            console.error('Failed to update task status:', response);
+        }
+    } catch (error) {
+        console.error('Error updating task status:', error);
+    }
 };
 
 </script>
@@ -56,7 +74,7 @@ const changeStatus = (task) => {
                                     <div class="mt-4 flex justify-end">
                                         <button @click="editTask(task)" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
                                         <button @click="deleteTask(task)" class="text-red-600 hover:text-red-900 mr-2">Delete</button>
-                                        <button @click="changeStatus(task)" class="text-green-600 hover:text-green-900">Change Status</button>
+                                        <button v-if="!task.status" @click="changeStatus(task)" class="text-green-600 hover:text-green-900">Mrk Done</button>
                                     </div>
                                 </div>
                             </div>
