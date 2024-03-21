@@ -9,6 +9,7 @@
 > Composer (Latest)
 >
 > Node LTS
+> 
 > You can also setup project using Docker (Sail) ignoring all stack requirements
 
 ## Setup (Docker)
