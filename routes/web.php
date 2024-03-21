@@ -15,7 +15,6 @@ Route::get('/', function () {
     ]);
 });
 
-
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [TaskPageController::class, 'index'])->name('dashboard');

@@ -15,6 +15,6 @@ class Task extends Model
         'due_date',
         'priority',
         'status',
-        'user_id'
+        'user_id',
     ];
 }

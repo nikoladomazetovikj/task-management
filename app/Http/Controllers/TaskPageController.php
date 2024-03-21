@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Task\EditTaskRequest;
 use App\Models\Task;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TaskPageController extends Controller
@@ -25,8 +24,6 @@ class TaskPageController extends Controller
         return Inertia::render('Task/CreateTask');
     }
 
-
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -34,5 +31,4 @@ class TaskPageController extends Controller
     {
         return Inertia::render('Task/EditTask', ['task' => $task]);
     }
-
 }

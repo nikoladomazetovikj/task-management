@@ -28,9 +28,9 @@ class UpdateTaskRequest extends FormRequest
         return [
             'name' => ['sometimes', 'required'],
             'description' => ['sometimes', 'required'],
-            'due_date' => ['sometimes','required', 'date', 'after_or_equal:today'],
-            'priority' => ['sometimes','required'],
-            'status' => ['sometimes']
+            'due_date' => ['sometimes', 'required', 'date', 'after_or_equal:today'],
+            'priority' => ['sometimes', 'required'],
+            'status' => ['sometimes'],
         ];
     }
 }
