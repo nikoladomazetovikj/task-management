@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import { usePage, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const { data, get } = usePage().props;
@@ -43,17 +43,20 @@ const changeStatus = (task) => {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div v-if="tasks.length" class="p-6 text-gray-900">
-                        <ul>
-                            <li v-for="task in tasks" :key="task.id">
-                                {{ task.title }}
-                                <button @click="editTask(task)">Edit</button>
-                                <button @click="deleteTask(task)">Delete</button>
-                                <button @click="changeStatus(task)">Change Status</button>
-                            </li>
-                        </ul>
+                    <div class="p-6 text-gray-900">
+                        <Link href='/create-task'>Create Task</Link>
+                        <div v-if="tasks.length">
+                            <ul>
+                                <li v-for="task in tasks" :key="task.id">
+                                    {{ task.title }}
+                                    <button @click="editTask(task)">Edit</button>
+                                    <button @click="deleteTask(task)">Delete</button>
+                                    <button @click="changeStatus(task)">Change Status</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div v-else>No tasks available</div>
                     </div>
-                    <div v-else class="p-6 text-gray-900">No tasks available</div>
                 </div>
             </div>
         </div>
