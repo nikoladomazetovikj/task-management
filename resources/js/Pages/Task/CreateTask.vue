@@ -25,7 +25,8 @@ const submitForm = async () => {
             form.reset();
         }
     } catch (error) {
-        console.error('Error submitting form:', 'sss');
+        errors.value = error.response.data.errors;
+        console.log('Error submitting form:', error);
     }
 };
 
@@ -54,13 +55,15 @@ const submitForm = async () => {
                             <div>
                                 <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
                                 <textarea v-model="form.description" id="description" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
-                                <span v-if="errors.description" class="text-red-500 text-sm">{{ errors.description }}</span>
+                                <span v-if="errors.description" class="text-red-500 text-sm">{{ errors.description[0]
+                                    }}</span>
                             </div>
 
                             <div>
                                 <label for="due_date" class="block text-sm font-medium text-gray-700">Due Date:</label>
                                 <input type="date" v-model="form.due_date" id="due_date" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                <span v-if="errors.due_date" class="text-red-500 text-sm">{{ errors.due_date }}</span>
+                                <span v-if="errors.due_date" class="text-red-500 text-sm">{{ errors.due_date[0]
+                                    }}</span>
                             </div>
 
                             <div>
@@ -70,7 +73,8 @@ const submitForm = async () => {
                                     <option value="medium">Medium</option>
                                     <option value="high">High</option>
                                 </select>
-                                <span v-if="errors.priority" class="text-red-500 text-sm">{{ errors.priority }}</span>
+                                <span v-if="errors.priority" class="text-red-500 text-sm">{{ errors.priority[0]
+                                    }}</span>
                             </div>
 
                             <button type="submit" class="bg-indigo-600 text-white rounded-md px-4 py-2 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
