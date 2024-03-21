@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { usePage, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
@@ -7,7 +7,14 @@ const { data, get } = usePage().props;
 const tasks = ref([]);
 
 
+const filterOption = ref('all');
+const sortOption = ref('due_date');
+
 onMounted(async () => {
+    await fetchTasks();
+});
+
+const fetchTasks = async () => {
     try {
         const response = await axios.get('/api/task');
         if (response.status === 200) {
@@ -18,10 +25,6 @@ onMounted(async () => {
     } catch (error) {
         console.error('Error fetching tasks:', error);
     }
-});
-
-const editTask = (task) => {
-    // TODO:
 };
 
 const deleteTask = async (task) => {
@@ -50,6 +53,27 @@ const changeStatus = async (task) => {
     }
 };
 
+
+const filteredAndSortedTasks = computed(() => {
+    let filteredTasks = tasks.value;
+    if (filterOption.value === 'completed') {
+        filteredTasks = filteredTasks.filter(task => task.status);
+    } else if (filterOption.value === 'not-completed') {
+        filteredTasks = filteredTasks.filter(task => !task.status);
+    }
+
+    if (sortOption.value === 'due_date') {
+        filteredTasks.sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
+    } else if (sortOption.value === 'priority') {
+        filteredTasks.sort((a, b) => {
+            const priorityOrder = { 'low': 1, 'medium': 2, 'high': 3 };
+            return priorityOrder[a.priority.toLowerCase()] - priorityOrder[b.priority.toLowerCase()];
+        });
+    }
+
+    return filteredTasks;
+});
+
 const priorityColor = (priority) => {
     switch (priority.toLowerCase()) {
         case 'low':
@@ -73,9 +97,29 @@ const priorityColor = (priority) => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <!-- Filter and Sort Controls -->
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <label for="filter">Filter:</label>
+                        <select v-model="filterOption" id="filter" class="ml-2">
+                            <option value="all">All</option>
+                            <option value="completed">Completed</option>
+                            <option value="not-completed">Not Completed</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sort">Sort By:</label>
+                        <select v-model="sortOption" id="sort" class="ml-2">
+                            <option value="due_date">Due Date</option>
+                            <option value="priority">Priority</option>
+                        </select>
+                    </div>
+                </div>
+
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <template v-if="tasks.length">
-                        <div v-for="task in tasks" :key="task.id">
+                    <template v-if="filteredAndSortedTasks.length">
+                        <div v-for="task in filteredAndSortedTasks" :key="task.id">
                             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                 <div class="p-6 flex flex-col h-full">
                                     <h3 class="text-lg font-semibold">{{ task.name }}</h3>
@@ -90,7 +134,7 @@ const priorityColor = (priority) => {
                                     </p>
                                     <hr>
                                     <div class="mt-4 flex justify-between items-center">
-                                        <button @click="editTask(task)" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                                        <Link :href="'/edit-task'" :props="{ task }" class="text-indigo-600 hover:text-indigo-900">Edit</Link>
                                         <button @click="deleteTask(task)" class="text-red-600 hover:text-red-900">Delete</button>
                                         <button v-if="!task.status" @click="changeStatus(task)" class="text-green-600 hover:text-green-900">Mark Done</button>
                                     </div>
