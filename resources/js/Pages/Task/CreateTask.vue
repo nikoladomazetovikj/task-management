@@ -23,6 +23,7 @@ const submitForm = async () => {
             errors.value = response.data.errors;
         } else {
             form.reset();
+            errors.value = {}
         }
     } catch (error) {
         errors.value = error.response.data.errors;
