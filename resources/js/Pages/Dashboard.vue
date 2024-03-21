@@ -5,7 +5,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const { data, get } = usePage().props;
 const tasks = ref([]);
-
+const successMessage = ref('');
 
 const filterOption = ref('all');
 const sortOption = ref('due_date');
@@ -32,6 +32,10 @@ const deleteTask = async (task) => {
         const response = await axios.delete(`/api/task/${task.id}`);
         if (response.status === 204) {
             tasks.value = tasks.value.filter(t => t.id !== task.id);
+            successMessage.value = 'Task Deleted';
+            setTimeout(() => {
+                successMessage.value = '';
+            }, 5000);
         } else {
             console.error('Failed to delete task', response);
         }
@@ -117,6 +121,9 @@ const priorityColor = (priority) => {
                 </div>
 
 
+                <div v-if="successMessage" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                    <p class="font-bold">{{ successMessage }}</p>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <template v-if="filteredAndSortedTasks.length">
                         <div v-for="task in filteredAndSortedTasks" :key="task.id">

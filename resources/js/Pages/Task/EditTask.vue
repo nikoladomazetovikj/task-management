@@ -16,6 +16,7 @@ const form = useForm({
     priority: props.task.priority
 });
 
+const successMessage = ref('');
 const errors = ref({});
 
 
@@ -27,6 +28,10 @@ const submitForm = async () => {
         } else {
             form.reset();
             errors.value = {}
+            successMessage.value = 'Task Updated';
+            setTimeout(() => {
+                successMessage.value = '';
+            }, 5000);
         }
     } catch (error) {
         errors.value = error.response.data.errors;
@@ -46,6 +51,9 @@ const submitForm = async () => {
             <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
+                        <div v-if="successMessage" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                            <p class="font-bold">{{ successMessage }}</p>
+                        </div>
                         <form @submit.prevent="submitForm" class="space-y-4">
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
