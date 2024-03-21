@@ -134,7 +134,9 @@ const priorityColor = (priority) => {
                                     </p>
                                     <hr>
                                     <div class="mt-4 flex justify-between items-center">
-                                        <Link :href="'/edit-task'" :props="{ task }" class="text-indigo-600 hover:text-indigo-900">Edit</Link>
+                                        <Link :href="`/edit-task/${task.id}`"
+                                              class="text-indigo-600 hover:text-indigo-900">
+                                            Edit</Link>
                                         <button @click="deleteTask(task)" class="text-red-600 hover:text-red-900">Delete</button>
                                         <button v-if="!task.status" @click="changeStatus(task)" class="text-green-600 hover:text-green-900">Mark Done</button>
                                     </div>

@@ -22,6 +22,13 @@ Route::get('/create-task', function () {
     return Inertia::render('Task/CreateTask');
 })->middleware(['auth', 'verified'])->name('task.create');
 
+Route::get('/edit-task/{id}', function ($id) {
+
+    $task = \App\Models\Task::find($id);
+
+    return Inertia::render('Task/EditTask', ['task' => $task]);
+})->middleware(['auth', 'verified'])->name('task.edit');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
