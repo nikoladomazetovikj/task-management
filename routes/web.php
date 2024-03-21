@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskPageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,22 +15,13 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/create-task', function () {
-    return Inertia::render('Task/CreateTask');
-})->middleware(['auth', 'verified'])->name('task.create');
-
-Route::get('/edit-task/{id}', function ($id) {
-
-    $task = \App\Models\Task::find($id);
-
-    return Inertia::render('Task/EditTask', ['task' => $task]);
-})->middleware(['auth', 'verified'])->name('task.edit');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [TaskPageController::class, 'index'])->name('dashboard');
+    Route::get('/create-task', [TaskPageController::class, 'create'])->name('task.create');
+    Route::get('/edit-task/{task}', [TaskPageController::class, 'edit'])->name('task.edit');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
